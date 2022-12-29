@@ -14,12 +14,27 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "show-line-metrics.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "show-line-metrics",
+          "title": "Show Line Metrics",
+          "icon": "resources/show-line-metrics.svg"
+        }
+      ]
+    },
+    "views": {
+      "show-line-metrics": [
+        {
+          "id": "package-dependencies",
+          "name": "Dependencies"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
