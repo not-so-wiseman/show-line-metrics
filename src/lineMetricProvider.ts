@@ -39,6 +39,7 @@ export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNo
     private getDirLineMetrics(rootNode: LineMetricsNode): LineMetricsNode[] {
         try {
             let children: LineMetricsNode[] = this.parseFiles(rootNode);
+            console.log(children);
             return children;
 
         } catch (error) {
@@ -56,7 +57,6 @@ export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNo
 
         const preOrderHelper = (node: LineMetricsNode) => {
             files.push(node);
-            console.log(node.getPath());
 
             //recursively call function on all node children
             if (node.isDirectory()) {
@@ -67,9 +67,11 @@ export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNo
                 for (const child of children) {
                     preOrderHelper(child);
                     // add child's line count to the directory's total line count
-                    let lines = child.countLines();
-                    child.setLineCount(lines);
-                    sum += lines;
+                    if (!child.isDirectory()) {
+                        let lines = child.countLines();
+                        child.setLineCount(lines);
+                        sum += lines;
+                    }
                 }
                 node.setLineCount(sum);
             }
