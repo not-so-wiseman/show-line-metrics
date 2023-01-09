@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:show-line-metrics.helloWorld"
+    "configuration"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -19,19 +19,20 @@
         {
           "id": "show-line-metrics",
           "title": "Show Line Metrics",
-          "icon": "resources/show-line-metrics.svg"
+          "icon": "assets/show-line-metrics.svg"
         }
       ]
     },
     "views": {
       "show-line-metrics": [
         {
-          "id": "package-dependencies",
-          "name": "Dependencies"
+          "id": "explorer",
+          "name": "Explorer"
         },
         {
-          "id": "package-outline",
-          "name": "Outline"
+          "id": "configuration",
+          "type": "webview",
+          "name": "Configuration"
         }
       ]
     }
