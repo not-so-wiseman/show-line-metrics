@@ -1,7 +1,8 @@
 
 import * as vscode from 'vscode';
 import { LineMetricsNode } from './lineMetricsNode';
-import { getFolderName, pathExists } from './utils';
+import { getFolderName, pathExists } from '../resources/utils';
+import { ConfigFile } from '../config/configFileInterface';
 
 export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNode> {
     constructor(private path: vscode.Uri) {
@@ -31,6 +32,16 @@ export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNo
                 let rootNode: LineMetricsNode = new LineMetricsNode(this.path, label);
                 return Promise.resolve(rootNode.getChildren());
             }
+        }
+    }
+
+    public refresh() {
+        let wsFolders = vscode.workspace.workspaceFolders;
+        if (wsFolders !== undefined) {
+            this.path = vscode.Uri.file(wsFolders[0].uri.path);
+            this.m_onDidDataChange.fire();
+        } else {
+            vscode.window.showInformationMessage(`Could not refresh Show Line Metrics Plugin.`);
         }
     }
 }

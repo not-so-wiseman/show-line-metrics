@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as pathTool from 'path';
-import { isDirectory, joinPath } from './utils';
+import { isDirectory, joinPath } from '../resources/utils';
 import path = require('path');
 
 export class LineMetricsNode extends vscode.TreeItem {

@@ -24,3 +24,9 @@ export function getFolderName(p: vscode.Uri | string): string {
     let pathFolders = ((typeof p === 'string') ? p : p.fsPath).split(pathTool.sep).pop();
     return (pathFolders !== undefined) ? pathFolders : "Root";
 }
+
+export function read(path: vscode.Uri): string {
+    let contents = fs.readFileSync(path.fsPath, {encoding:'utf8', flag:'r'});
+    return contents;
+}
+
