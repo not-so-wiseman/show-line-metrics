@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { LineMetricProvider } from './tree/lineMetricProvider';
 import { ConfigProvider } from './config/configProvider';
+import { joinPath } from './resources/utils';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -21,19 +22,23 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.createTreeView('explorer', {
 				treeDataProvider: new LineMetricProvider(root)
 			})
-		)
+		);
 	} else {
 		vscode.window.showInformationMessage(`Please open a directory or workspace to start line metrics.`);
 	}
 
-	let configProvider = new ConfigProvider(context.extensionUri);
+
+	let configFilePath: vscode.Uri = joinPath(context.extensionUri, ['config.txt']);
+	let configProvider = new ConfigProvider(context.extensionUri, configFilePath);
 	
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider("configuration", configProvider)
 	);
-	
-	
-	
+
+	vscode.commands.registerCommand("open-configuration", () => {
+		configProvider.show();
+	});
+
 }
 
 // This method is called when your extension is deactivated

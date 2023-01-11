@@ -7,72 +7,34 @@ const vscode = acquireVsCodeApi();
 window.addEventListener("load", main);
 
 function main() {
-  setVSCodeMessageListener();
-  vscode.postMessage({ command: "requestNoteData" });
-
-  const saveButton = document.getElementById("submit-button");
-  saveButton.addEventListener("click", () => saveNote());
+  getInput();
+  deleteEntry();
 }
 
-// Stores the currently opened note info so we know the ID when we update it on save
-let openedNote;
 
-function setVSCodeMessageListener() {
-  window.addEventListener("message", (event) => {
-    const command = event.data.command;
-    const noteData = JSON.parse(event.data.payload);
-
-    switch (command) {
-      case "receiveDataInWebview":
-        openedNote = noteData;
-        renderTags(openedNote.tags);
-        break;
+function getInput() {
+  const inputBox = document.getElementById("input");
+  inputBox.addEventListener("keypress", (e) => {
+    if (e.key === 'Enter') {
+      vscode.postMessage({
+        command: 'input',
+        text: `${inputBox.value}`
+      }); 
     }
   });
 }
 
-function saveNote() {
-  const titleInputValue = document.getElementById("title").value;
-  const noteInputValue = document.getElementById("content").value;
-  const tagsInputValue = document.getElementById("tags-input").value;
 
-  let tagsInputList = [];
-  if (tagsInputValue.length > 0) {
-    tagsInputList = tagsInputValue.split(",").map((tag) => tag.trim());
-  }
+function deleteEntry() {
+  const closeButtons = document.getElementsByTagName("vscode-button");
 
-  const noteToUpdate = {
-    id: openedNote.id,
-    title: titleInputValue,
-    content: noteInputValue,
-    tags: tagsInputList,
-  };
-
-  vscode.postMessage({ command: "updateNote", note: noteToUpdate });
-}
-
-function renderTags(tags) {
-  const tagsContainer = document.getElementById("tags-container");
-  clearTagGroup(tagsContainer);
-  if (tags.length > 0) {
-    addTagsToTagGroup(tags, tagsContainer);
-    tagsContainer.style.marginBottom = "2rem";
-  } else {
-    // Remove tag container bottom margin if there are no tags
-    tagsContainer.style.marginBottom = "0";
-  }
-}
-
-function clearTagGroup(tagsContainer) {
-  while (tagsContainer.firstChild) {
-    tagsContainer.removeChild(tagsContainer.lastChild);
-  }
-}
-
-function addTagsToTagGroup(tags, tagsContainer) {
-  for (const tagString of tags) {
-    const vscodeTag = document.createElement("vscode-tag");
-    vscodeTag.textContent = tagString;
-    tagsContainer.appendChild(vscodeTag);
-  }
+  closeButtons.array.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      let entry = btn.parent.children.getElementsByTagName('vscode-checkbox').text;
+      vscode.postMessage({
+        command: 'delete',
+        text: `${entry}`
+      }); 
+    });
+  });
 }

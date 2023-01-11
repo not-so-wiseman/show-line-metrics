@@ -35,6 +35,55 @@
           "name": "Configuration"
         }
       ]
+    },
+    "commands": [
+      {
+        "command": "add-extension",
+        "category": "Configuration",
+        "title": "Add Extension",
+        "icon": "$(diff-review-insert)"
+      },
+      {
+        "command": "remove-extension",
+        "category": "Configuration",
+        "title": "Remove Extension",
+        "icon": "$(diff-review-remove)"
+      },
+      {
+        "command": "toggle-extension",
+        "category": "Configuration",
+        "title": "Check/Uncheck Extension"
+      },
+      {
+        "command": "close-configuration",
+        "category": "Configuration",
+        "title": "Close Configuration Panel",
+        "icon": "$(diff-review-close)"
+      },
+      {
+        "command": "open-configuration",
+        "title": "Open Configuration",
+        "icon": "$(debug-configure)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "open-configuration",
+          "when": "view == explorer",
+          "group": "navigation@0"
+        },
+        {
+          "command": "add-extension",
+          "when": "view == configuration",
+          "group": "navigation@0"
+        },
+        {
+          "command": "close-configuration",
+          "when": "view == configuration",
+          "group": "navigation@1"
+        }
+      ]
     }
   },
   "scripts": {
@@ -49,7 +98,9 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/dom-parser": "^0.1.1",
     "@types/glob": "^8.0.0",
+    "@types/jsdom": "^20.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
     "@types/vscode": "^1.74.0",
@@ -65,6 +116,10 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "@vscode/codicons": "^0.0.32",
+    "@vscode/webview-ui-toolkit": "^1.2.1",
+    "dom-parser": "^0.1.6",
+    "jsdom": "^21.0.0",
     "vscode": "^1.1.37"
   }
 }

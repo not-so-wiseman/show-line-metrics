@@ -1,3 +1,5 @@
-.java
-.c
-.cpp
+.java, true
+.c, false
+.cpp, true
+.test, true
+.test, true

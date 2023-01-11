@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="module" src="${toolkitUri}"></script>
+        <script type="module" src="${mainUri}"></script>
+        <link rel="stylesheet" href="${iconsUri}">
+        <link rel="stylesheet" href="${styleUri}">
+        <title>Configuration</title>
+    </head>
+    <body id="webview-body">
+        <p>Extensions to parse</p>
+        <div id="checkboxes">
+            ${checkboxes}
+        </div>
+        <div id="add-extension" style="visibility: hidden">
+            <vscode-checkbox checked disabled="true"></vscode-checkbox>
+            <vscode-text-field placeholder="extension to add" aria-label="input box" id="input" type="text" autofocus></vscode-text-field>
+            <vscode-button appearance="icon" aria-label="Delete">
+                <span class="codicon codicon-close"></span>
+            </vscode-button>
+        </div>
+    </body>
+</html>
