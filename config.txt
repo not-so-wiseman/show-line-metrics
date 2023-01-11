@@ -1,5 +1,3 @@
 .java, true
-.c, false
 .cpp, true
-.test, true
-.test, true
+.c, true

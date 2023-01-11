@@ -47,4 +47,8 @@ export class FileExtension {
         </div>
         `;
     }
+
+    public compare(extension: string) {
+        return this.extension === extension;
+    }
 }

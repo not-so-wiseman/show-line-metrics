@@ -5,6 +5,7 @@ import { joinPath } from '../resources/utils';
 import { FileExtension } from '../config/fileExtension';
 import { assert } from 'console';
 import { JSDOM } from 'jsdom';
+import { LineMetricsNode } from '../tree/lineMetricsNode';
 
 export class ConfigProvider implements vscode.WebviewViewProvider  {
     public static readonly viewType = 'configuration';
@@ -12,7 +13,7 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
 
 	constructor(private readonly _extensionUri: vscode.Uri, private readonly _configFile: vscode.Uri) {
         //vscode.commands.registerCommand('remove-extension', r => this.addExtension(r));
-        vscode.commands.registerCommand('add-extension', r => this.showInput());
+        vscode.commands.registerCommand('add-extension', r => this.toggleInputVisibility('show'));
     }
     
     resolveWebviewView(
@@ -33,18 +34,22 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
         this._view.webview.html = this._getHTML(webviewView.webview);
 
         this._view.webview.onDidReceiveMessage((message) => {
+            vscode.window.showInformationMessage(`${message.text}`);
             const command = message.command;
             switch (command) {
                 case 'input':
-                    vscode.window.showInformationMessage(message.text);
                     this.addExtension(message.text);
-                    if (this._view !== undefined) {
-                        this._view.webview.html = this._getHTML(webviewView.webview);
-                    }
                     break;
                 case 'delete':
-                    vscode.window.showInformationMessage(message.text);
+                    if (message.text === 'text-field') {
+                        this.toggleInputVisibility('hide');
+                    } else {
+                        this.deleteExtensionEntry(message.text);
+                    }
                     break;
+            }
+            if (this._view !== undefined) {
+                this._view.webview.html = this._getHTML(webviewView.webview);
             }
         }, undefined);
     }
@@ -63,24 +68,51 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
 
     
 
-    public showInput() {
+    public toggleInputVisibility(option: string) {
         if (this._view !== undefined) {
             let hidden = `<div id="add-extension" style="visibility: hidden">`;
             let visible = `<div id="add-extension" style="visibility: visible">`;
-            let updatedHTML = this._view?.webview.html.replace(hidden, visible);
-            this._view.webview.html = updatedHTML;
+            let updatedHTML: string;
+            if (option === 'show') {
+                updatedHTML = this._view?.webview.html.replace(hidden, visible);
+            } else {
+                updatedHTML = this._view?.webview.html.replace(visible, hidden);
+            }
+            this._view.webview.html = updatedHTML   
         }
     }
 
     public addExtension(extType: string) {
-        if (extType[0] !== '.') {
-            extType = `.${extType}`;
-        }
-        fs.appendFileSync(this._configFile.fsPath, `\n${extType}, true`);
+        extType = (extType[0] !== '.') ? `.${extType}` : extType;
+        let duplicate: boolean = false;
+
+        let extensions = this.readConfigFile();
+        for(let i = 0; i < extensions.length; i++){
+            if (extensions[i].compare(extType)) {
+                duplicate = true;
+                break;
+            }
+        };
+
+        if(!duplicate) { 
+            fs.appendFileSync(this._configFile.fsPath, `\n${extType}, true`);
+        } else {
+            vscode.window.showInformationMessage(`Extension type ${extType} already exists.`);
+        };
     }
 
-    public uncheckExtension(r:any) {
-        console.log(r);
+    public toggleExtensionCheckbox(id: string, option: string): string {
+        let checked = (option === 'checked') ? true : false;
+        let extensions = fs.readFileSync(this._configFile.fsPath, {encoding:'utf8', flag:'r'})
+            .split(/\r\n|\r|\n/)
+            .map(line => {
+                let ext = new FileExtension(line);
+                if (ext.compare(`.${id}`)) {
+                    return `.${id}, ${checked}`;
+                }
+                return line;
+            });
+        return extensions.join('\n');
     }
 
 
@@ -134,26 +166,21 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
     }
 
     
-    private setConfigFile(types: string[]): boolean {
-        let data: string = types.join('\n');
-        fs.writeFile(this._configFile.fsPath, data, {encoding: "utf8"}, (err) => {
-            if (err) {
-                vscode.window.showInformationMessage(`Could not set configuration file. ${err}`);
-                return false;
-            }
-        });
-        return true;
+    private deleteExtensionEntry(id: string) {
+        let extensions = fs.readFileSync(this._configFile.fsPath, {encoding:'utf8', flag:'r'})
+            .split(/\r\n|\r|\n/);
+
+        let isMatch = (line: string) => {
+            let ext = new FileExtension(line);
+            let match = ext.compare(`.${id}`);
+            return !match;
+        }
+
+        let newConfigContents: string = extensions.filter(isMatch).join('\n');
+        fs.writeFileSync(this._configFile.fsPath, newConfigContents); 
     }
 
-    private compareExtensions(path: vscode.Uri, types: string[]): boolean {
-        let extension: string = path.fsPath.split('.')[2];
-        types.forEach(type => {
-            if (extension === type) {
-                return true;
-            }
-        });
-        return false;
-    }
+   
 
 
     

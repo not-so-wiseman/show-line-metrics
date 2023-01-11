@@ -27,14 +27,32 @@ function getInput() {
 
 function deleteEntry() {
   const closeButtons = document.getElementsByTagName("vscode-button");
+  let closeButtonsArray = [...closeButtons];
 
-  closeButtons.array.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      let entry = btn.parent.children.getElementsByTagName('vscode-checkbox').text;
+  closeButtonsArray.forEach(btn => {
+    let id = btn.parentElement.getElementsByTagName('vscode-checkbox')[0].getAttribute('id');
+    btn.addEventListener("click", function () {
       vscode.postMessage({
         command: 'delete',
-        text: `${entry}`
-      }); 
+        text: `${id}`
+      });
     });
   });
+
+  /*
+  if (closeButtons.length > 0) {
+
+    for (let i = 0; i < closeButtons.length; i++) {
+      
+      closeButtons.elements[i].addEventListener("click", (e) => {
+        document.getElementById("Test").innerText = `Test`;
+        let entry = btn.parent.children.getElementsByTagName('vscode-checkbox').text;
+        vscode.postMessage({
+          command: 'delete',
+          text: `${entry}`
+        }); 
+      });
+    }
+*/
+  
 }
