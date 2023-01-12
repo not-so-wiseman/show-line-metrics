@@ -1,3 +1,2 @@
-.java, true
 .cpp, true
 .c, true

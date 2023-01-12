@@ -1,14 +1,20 @@
 
 import * as vscode from 'vscode';
 import { LineMetricsNode } from './lineMetricsNode';
-import { getFolderName, pathExists } from '../resources/utils';
-import { ConfigFile } from '../config/configFileInterface';
+import { getFolderName, pathExists } from '../utils';
 
 export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNode> {
-    constructor(private path: vscode.Uri) {
+    private _onDidChangeTreeData: vscode.EventEmitter<LineMetricsNode | undefined> = 
+        new vscode.EventEmitter<LineMetricsNode | undefined>();
+
+    readonly onDidChangeTreeData ? : vscode.Event<LineMetricsNode | undefined> = this._onDidChangeTreeData.event;
+
+    
+    constructor(private path: vscode.Uri, private configFilePath: vscode.Uri) {
         if (!pathExists(path)) {
             vscode.window.showInformationMessage(`${path} is not a valid directory!`);
         }
+        vscode.commands.registerCommand('refresh', () => this.refresh());
     }
 
     getTreeItem(element: LineMetricsNode): vscode.TreeItem {
@@ -29,9 +35,17 @@ export class LineMetricProvider implements vscode.TreeDataProvider<LineMetricsNo
 
             } else {
                 let label = getFolderName(this.path);
-                let rootNode: LineMetricsNode = new LineMetricsNode(this.path, label);
+                let rootNode: LineMetricsNode = new LineMetricsNode(this.path, label, this.configFilePath);
                 return Promise.resolve(rootNode.getChildren());
             }
+        }
+    }
+
+    refresh() {
+        let wsFolders = vscode.workspace.workspaceFolders;
+        if (wsFolders !== undefined) {
+            this.path = vscode.Uri.file(wsFolders[0].uri.path);
+            this._onDidChangeTreeData.fire(undefined);
         }
     }
 }

@@ -44,32 +44,16 @@
         "icon": "$(diff-review-insert)"
       },
       {
-        "command": "remove-extension",
-        "category": "Configuration",
-        "title": "Remove Extension",
-        "icon": "$(diff-review-remove)"
-      },
-      {
-        "command": "toggle-extension",
-        "category": "Configuration",
-        "title": "Check/Uncheck Extension"
-      },
-      {
-        "command": "close-configuration",
-        "category": "Configuration",
-        "title": "Close Configuration Panel",
-        "icon": "$(diff-review-close)"
-      },
-      {
-        "command": "open-configuration",
-        "title": "Open Configuration",
-        "icon": "$(debug-configure)"
+        "command": "refresh",
+        "category": "Explorer",
+        "title": "Refresh",
+        "icon": "$(search-refresh)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "open-configuration",
+          "command": "refresh",
           "when": "view == explorer",
           "group": "navigation@0"
         },
@@ -77,11 +61,6 @@
           "command": "add-extension",
           "when": "view == configuration",
           "group": "navigation@0"
-        },
-        {
-          "command": "close-configuration",
-          "when": "view == configuration",
-          "group": "navigation@1"
         }
       ]
     }

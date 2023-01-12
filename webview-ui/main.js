@@ -9,6 +9,7 @@ window.addEventListener("load", main);
 function main() {
   getInput();
   deleteEntry();
+  toggleCheck();
 }
 
 
@@ -38,21 +39,27 @@ function deleteEntry() {
       });
     });
   });
+}
 
-  /*
-  if (closeButtons.length > 0) {
 
-    for (let i = 0; i < closeButtons.length; i++) {
-      
-      closeButtons.elements[i].addEventListener("click", (e) => {
-        document.getElementById("Test").innerText = `Test`;
-        let entry = btn.parent.children.getElementsByTagName('vscode-checkbox').text;
+function toggleCheck() {
+  const checkboxes = document.getElementsByTagName("vscode-checkbox");
+  let checkboxesArray = [...checkboxes];
+
+  checkboxesArray.forEach(chk => {
+    let id = chk.getAttribute('id');
+    chk.addEventListener('click',  function() {
+      if (chk.checked) {
         vscode.postMessage({
-          command: 'delete',
-          text: `${entry}`
-        }); 
-      });
-    }
-*/
-  
+          command: 'check',
+          text: `${id}`
+        });
+      } else {
+        vscode.postMessage({
+          command: 'uncheck',
+          text: `${id}`
+        });
+      }
+    })
+  });
 }
