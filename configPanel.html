@@ -16,11 +16,17 @@
             ${checkboxes}
         </div>
         <div id="add-extension" style="visibility: hidden">
-            <vscode-checkbox checked disabled="true" id="text-field"></vscode-checkbox>
-            <vscode-text-field placeholder="extension to add" aria-label="input box" id="input" type="text" autofocus></vscode-text-field>
-            <vscode-button appearance="icon" aria-label="Delete">
-                <span class="codicon codicon-close"></span>
-            </vscode-button>
+            <section slot="start" style="display:flex; align-items: center; justify-content: space-between;">
+            <vscode-checkbox checked disabled="true"></vscode-checkbox>
+            <vscode-text-field placeholder="extension to add" aria-label="input box" 
+                id="input" type="text"  style="margin-left: 8px" size="50" autofocus>
+                <section slot="end" style="display:flex; align-items: center;">
+                    <vscode-button appearance="icon" aria-label="Delete" id="text-field">
+                        <span class="codicon codicon-close"></span>
+                    </vscode-button>
+                </section>
+            </vscode-text-field>
+        </section>
         </div>
     </body>
 </html>

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import { joinPath, Check, Visibility } from '../utils';
+import { joinPath, Check, Visibility, readConfigFile } from '../utils';
 import { FileExtension } from '../config/fileExtension';
 import { LineMetricProvider } from '../tree/lineMetricProvider';
 
@@ -74,11 +74,7 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
      * extension's name and whether it is enabled.
      */
     private readConfigFile(): FileExtension[] {
-        let contents = fs.readFileSync(this._configFile.fsPath, {encoding:'utf8', flag:'r'});
-        let lines: FileExtension[] = contents.split(/\r\n|\r|\n/).map(line => {
-            return new FileExtension(line);
-        });
-        return lines;
+        return readConfigFile(this._configFile);
     }
 
     /**
@@ -173,7 +169,7 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
             .split(/\r\n|\r|\n/)
             .map(line => {
                 let ext = new FileExtension(line);
-                if (ext.compare(`.${id}`)) {
+                if (ext.compare(`${id}`)) {
                     return `.${id}, ${checked}`;
                 }
                 return line;
@@ -186,11 +182,12 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
      * @param extType The extension to add, e.g. 'java'
      */
     public addExtension(extType: string) {
-        extType = (extType[0] !== '.') ? `.${extType}` : extType;
+        //extType = (extType[0] === '.') ? `${extType}` : extType;
         let duplicate: boolean = false;
 
         let extensions = this.readConfigFile();
         for(let i = 0; i < extensions.length; i++){
+            console.log(extensions[i], extType);
             if (extensions[i].compare(extType)) {
                 duplicate = true;
                 break;
@@ -198,7 +195,7 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
         };
 
         if(!duplicate) { 
-            fs.appendFileSync(this._configFile.fsPath, `\n${extType}, true`);
+            fs.appendFileSync(this._configFile.fsPath, `\n.${extType}, true`);
         } else {
             vscode.window.showInformationMessage(`Extension type ${extType} already exists.`);
         };
@@ -209,16 +206,18 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
      * @param extType The extension to remove, e.g. 'c'
      */
     private deleteExtensionEntry(id: string) {
-        let extensions = fs.readFileSync(this._configFile.fsPath, {encoding:'utf8', flag:'r'})
-            .split(/\r\n|\r|\n/);
-
-        let isMatch = (line: string) => {
-            let ext = new FileExtension(line);
-            let match = ext.compare(`.${id}`);
+        let isMatch = (ext: FileExtension) => {
+            console.log(`.${id}`);
+            let match = ext.compare(`${id}`);
             return !match;
-        }
+        };
 
-        let newConfigContents: string = extensions.filter(isMatch).join('\n');
-        fs.writeFileSync(this._configFile.fsPath, newConfigContents); 
+        let extensions: string = this.readConfigFile()
+            .filter(isMatch)
+            .map((ext:FileExtension) => ext.toString())
+            .join('\n');
+
+    
+        fs.writeFileSync(this._configFile.fsPath, extensions); 
     }
 }

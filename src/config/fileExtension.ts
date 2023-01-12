@@ -14,7 +14,7 @@ export class FileExtension {
     constructor(line: string) {
         let contents = line.replace(" ", "").split(',');
         assert(contents.length === 2);
-        this.extension = contents[0]; 
+        this.extension = contents[0].replace('.', '').toLowerCase(); 
         this.checked = (contents[1] === 'true') ? true : false;
     }
 
@@ -39,6 +39,13 @@ export class FileExtension {
     }
 
     /**
+     * 
+     */
+    public toString() {
+        return `.${this.extension}, ${(this.checked) ? true: false}`;
+    }
+
+    /**
      * @returns The HTML for a checkbox depending on whether the
      * extension is enabled (checked) or disabled (unchecked). 
      */
@@ -47,21 +54,21 @@ export class FileExtension {
 
         if (this.isChecked()) {
             return `
-            <div class="checkbox">
-                <vscode-checkbox class="green" checked id="${id}">${this.extension}</vscode-checkbox>
-                <vscode-button class="icon green" appearance="icon" aria-label="Confirm">
-                    <span class="codicon codicon-close"> </span>
+            <section slot="start" style="display:flex; align-items: center; justify-content: space-between;">
+                <vscode-checkbox checked id="${id}-checkbox">.${this.extension}</vscode-checkbox>
+                <vscode-button id="${id}-delete" appearance="icon" aria-label="Delete" style="margin-right: 10px;">
+                    <span class="codicon codicon-close"></span>
                 </vscode-button>
-            </div>
+            </section>
             `;
         }
         return `
-        <div class="checkbox">
-            <vscode-checkbox id="${id}">${this.extension}</vscode-checkbox>
-            <vscode-button class="icon" appearance="icon" aria-label="Confirm">
-                <span class="codicon codicon-close"> </span>
+        <section slot="start" style="display:flex; align-items: center; justify-content: space-between;">
+            <vscode-checkbox class="green" style="margin: 0;" id="${id}-checkbox">.${this.extension}</vscode-checkbox>
+            <vscode-button id="${id}-delete" appearance="icon"  aria-label="Delete" style="margin-right: 10px;">
+                <span class="codicon codicon-close"></span>
             </vscode-button>
-        </div>
+        </section>
         `;
     }
 }

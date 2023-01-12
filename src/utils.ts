@@ -12,10 +12,21 @@ import { FileExtension } from './config/fileExtension';
      * extension's name and whether it is enabled.
      */
  export function readConfigFile(configFilePath: vscode.Uri): FileExtension[] {
+    let regEx = new RegExp(/\.\w+\,\s(true|false)/);
+    let isMatch = (line:string) => {
+        let result = regEx.exec(line);
+        if (result !== null) {
+            return true;
+        }
+        return false;
+    }
+
     let contents = fs.readFileSync(configFilePath.fsPath, {encoding:'utf8', flag:'r'});
-    let lines: FileExtension[] = contents.split(/\r\n|\r|\n/).map(line => {
-        return new FileExtension(line);
-    });
+    let lines: FileExtension[] = contents.split(/\r\n|\r|\n/)
+        .filter(line => isMatch(line))
+        .map(line => {
+            return new FileExtension(line);
+        });
     return lines;
 }
 

@@ -1,18 +1,7 @@
 .checkbox, #add-extension {
   display: flex;
-  
   justify-content: space-between;
-  border: 1px solid aquamarine;
   flex-wrap: nowrap;
   align-items: baseline !important;
+  margin-top: 8px;
 }
-
-.checkbox vscode-button {
-  border: 1px solid red;
-  margin: 0 !important;
-}
-
-.green {
-  border: 1px solid green;
-}
- 

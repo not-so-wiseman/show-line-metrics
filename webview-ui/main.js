@@ -31,7 +31,12 @@ function deleteEntry() {
   let closeButtonsArray = [...closeButtons];
 
   closeButtonsArray.forEach(btn => {
-    let id = btn.parentElement.getElementsByTagName('vscode-checkbox')[0].getAttribute('id');
+ 
+    let id = btn.getAttribute('id');
+    if (id !== 'text-field' && id !== null) {
+      id = id.split('-')[0]; 
+    }
+    
     btn.addEventListener("click", function () {
       vscode.postMessage({
         command: 'delete',
@@ -47,7 +52,7 @@ function toggleCheck() {
   let checkboxesArray = [...checkboxes];
 
   checkboxesArray.forEach(chk => {
-    let id = chk.getAttribute('id');
+    let id = chk.getAttribute('id').split('-')[0];
     chk.addEventListener('click',  function() {
       if (chk.checked) {
         vscode.postMessage({

@@ -56,7 +56,7 @@ export class LineMetricsNode extends vscode.TreeItem {
     private isEnabled(extensions: FileExtension[]): boolean {
         if (this.isDirectory()) { return true; }
 
-        let ext: string = "." + this.path.fsPath.split('.')[1];
+        let ext: string = this.path.fsPath.split('.')[1];
         if (extensions.some((extType: FileExtension) => extType.compare(ext))) {
             return true;
         }
