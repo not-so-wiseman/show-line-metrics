@@ -4,36 +4,34 @@ A plugin to show line metrics data for the currently open project.
 
 ## Features
 
-* ~~Explorer~~ view displays the number of line per file and per directory.
-![feature X](assets/line_count.gif)
+* _Explorer_ view displays the number of line per file and per directory.
+![Line Counting](assets/linecount.gif)
 * If the files or directories you have open change then simply click refresh to update the view.
-![feature X](assets/refresh.gif)
-* Change what file extensions are counted in the ~~Configuration~~ view.
+![Refresh](assets/refresh.gif)
+* Change what file extensions are counted in the _Configuration_ view.
     * Toggle extensions
-    ![feature X](assets/checkboxes.gif)
+    ![Checkboxes](assets/checkboxes.gif)
     * Add additional extensions
-    ![feature X](assets/add_extension.gif)
+    ![Add Extension](assets/add_extension.gif)
     * Delete extensions
-    ![feature X](assets/delete_extension.gif)
+    ![Delete Extension](assets/remove_extension.gif)
 
-## Requirements
+## Running this plugin in development
 
 1. Download and install node.js from [nodejs.org](https://nodejs.org/en/download/)
-2. Install the VS Code plugin library
+2. Open this plugin in in VS Code 1.49+
+3. `npm install`
+4. `npm run compile`
+5. `F5` to start debugging
 
-    ```bash
-    npm install -g yo generator-code`
-    ```
-
-3. Install the Webview UI Toolkit for Visual Studio Code
-
-    ```bash
-    npm install --save @vscode/webview-ui-toolkit`
-    ```
+In the activity bar select the ***Show Line Metrics icon*** ![Logo](assets/show-line-metrics.svg)
 
 ## Known Issues
 
-There are no unit tests written for this plugin do to time constraints. 
+There are no unit tests written for this plugin do to time constraints.
+
+:information_source: If you would like to _quickly_ manually test the plugin there is a test folder under ***src/test/testfolders***
+
 I would have tested for the following:
 * Basic functionality
     - view displays the write files and directories

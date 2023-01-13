@@ -182,12 +182,11 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
      * @param extType The extension to add, e.g. 'java'
      */
     public addExtension(extType: string) {
-        //extType = (extType[0] === '.') ? `${extType}` : extType;
+        extType = (extType[0] === '.') ? extType.replace('.', '') : extType;
         let duplicate: boolean = false;
 
         let extensions = this.readConfigFile();
         for(let i = 0; i < extensions.length; i++){
-            console.log(extensions[i], extType);
             if (extensions[i].compare(extType)) {
                 duplicate = true;
                 break;
@@ -207,7 +206,6 @@ export class ConfigProvider implements vscode.WebviewViewProvider  {
      */
     private deleteExtensionEntry(id: string) {
         let isMatch = (ext: FileExtension) => {
-            console.log(`.${id}`);
             let match = ext.compare(`${id}`);
             return !match;
         };
