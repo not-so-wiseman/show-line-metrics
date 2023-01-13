@@ -5,20 +5,26 @@ A plugin to show line metrics data for the currently open project.
 ## Features
 
 * _Explorer_ view displays the number of line per file and per directory.
-<img src="assets/linecount.gif" height="80%">
+<img src="assets/linecount.gif" height="500px">
 
 * If the files or directories you have open change then simply click refresh to update the view.
-<img src="assets/refresh.gif" height="80%">
+<img src="assets/refresh.gif" height="500px">
 
 * Change what file extensions are counted in the _Configuration_ view.
     * Toggle extensions
-    <img src="assets/checkboxes.gif" height="80%">
+
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/checkboxes.gif" height="500px">
 
     * Add additional extensions
-    <img src="assets/add_extension.gif" height="80%">
+
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/add_extension.gif" height="500px">
 
     * Delete extensions
-    <img src="assets/assets/remove_extension.gif" height="80%">
+
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/remove_extension.gif" height="500px">
 
 ## Running this plugin in development
 
@@ -28,7 +34,7 @@ A plugin to show line metrics data for the currently open project.
 4. `npm run compile`
 5. `F5` to start debugging
 
-In the activity bar select the ***Show Line Metrics icon*** <img src="assets/assets/show-line-metrics.svg" height="25px">
+In the activity bar select the ***Show Line Metrics icon*** <img src="assets/show-line-metrics.svg" height="25px">
 
 ## Known Issues
 
