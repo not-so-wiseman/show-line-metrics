@@ -34,7 +34,7 @@ A plugin to show line metrics data for the currently open project.
 4. `npm run compile`
 5. `F5` to start debugging
 
-In the activity bar select the ***Show Line Metrics icon*** <img src="assets/show-line-metrics.svg" height="25px">
+In the activity bar select the ***Show Line Metrics icon*** <img src="assets/show-line-metrics.png" height="25px">
 
 ## Known Issues
 
